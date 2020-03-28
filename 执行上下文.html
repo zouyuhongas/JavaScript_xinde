@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    //每次函数执行的时候,会产生一个执行上下文的对象,执行上下文是一个对象
+    /**
+    执行上下文里面会创建一个变量对象,里面存放着当前函数的变量
+    基本数据类型保存在变量对象里,引用数据类型要单独在单堆内存里开辟新的保存空间
+    变量对象里面保存的就是堆里的内存地址
+
+    在函数执行的时候基本类型会正常赋值,如果是对象或者数组正则就会是引用类型存的只是内存地址
+
+
+    基本类型数据修改不会互相影响,但引用类型的数据如果两个变量指向同一个对象其中一个改变另一个也会被改变因为他们引用的是同一个内存里面的数据
+
+
+    在执行上下文的时候执行对象会创建变脸改进型赋值,如果有相同的变量会跳过后面的变量不会再赋值
+    */
+    function task() {
+        var a = 1;
+        var b = {
+            name: 'yuhong'
+        }
+        var c = [1,2,3];
+    }
+    task();
+// -------------------------------
+let executionContext = {
+    // VO是执行上下文的对象
+    VO:{ m:{a:1,b:2}}
+}
+executionContext.VO.n = executionContext.VO.m;
+executionContext.VO.n = 10;
+console.log(executionContext.VO.m.a); //得到的是10
+    var m = {a:1,b:2};
+    var n = m ;
+    n.a = 10;
+    console.log(m.a) //10
+
+    // ------------------
+    var a = 1;
+    function fn(m) {console.log('fn')}
+    function fn(m) {console.log('new_fn')}
+    function a() {console.log('fn_a')}
+    console.log(a);
+    fn(1);
+    var fn = 'var_fn';
+    console.log(fn)
+</script>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    function Person (name , age){
+        this.name = name;
+        this.age = age;
+    }
+    // 把批量创建出来的对象(构造函数的实例)共同的属性放在构造函数的原型上
+    Person.prototype = {
+        eat(){
+            console.log('chifan')
+        }
+    }
+    function _New(clazz, ...args){
+        let obj = {};
+        obj.__proto__ = clazz.prototype;//关联构造函数的原型
+        clazz.call(obj,...args);//给实例的私有属性赋值
+        return obj;
+    }
+    let zhangsan = _New(Person,'zhangsan',10)
+    //__proto__隐式转换
+    //.也是一个运算符,先把zhangsan这个实例的属性上面找,如果找到会直接返回,如果找不到会在__proto__属性的身上有没有,如果有就直接返回使用
+    zhangsan.eat();
+    //基本类型的数据是没有原型方法的,早你在数据后面调用方法时会自动给你基本类型的包装对象(临时创建对象),
+    function _extends(Child,Father){
+        function Temp(){
+            // constructor指向子类的构造函数
+            this.constructor = Child;
+        }
+        Temp.prototype = Father.prototype;
+        Child.prototype = new Temp();
+    }
+    var Father = (function(){
+        function Father(name){
+            this.name =name;
+        }
+        Father.prototype.getName = function(){
+            console.log(this.name)
+        }
+        Father.staticFatherName = 'FatherName';
+        Father.staticGetFatherName = function(){
+            console.log(Father.staticFatherName);
+        }
+        return Father;
+    })()
+    var Child = (function(_super){ //_super=Father
+        function Child(name,age){
+            //this其实是指向子类的实例,new object{} 子类的实例
+            //是在调用父类的构造函数,初始化父类 私有属性
+            _super.call(this,name)
+        }
+        Father.prototype.getName = function(){
+            console.log(this.name)
+        }
+        Child.staticChildName = 'ChildName';
+        Child.staticGetChildName = function(){
+            console.log(Child.staticChildName);
+        }
+        return Child;
+    })()
+    /**
+        在创建一个对象的时候他身上就会有一个prototype的属性这个是他的原型对象他身上会继承构造函数的方法和参数,然后也可以通过new一个实例对象他身上的__proto__上找到原型然后也可以得到原型上的方法这样子的好处就是可以实现代码的复用
+
+    */
+</script>
+</html>

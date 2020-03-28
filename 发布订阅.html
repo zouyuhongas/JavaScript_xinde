@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    //首先会先创建一个函数,然后在函数的原型上添加订阅的方法和发布的方法,在构造函数中会有一个数组来储存所有的订阅者
+    let Event = function(){
+        this.events = [];
+    }
+    Event.prototype.on = function (fn){
+        this.events.push(fn)
+    }
+    Event.prototype.emit = function (data){
+        this.events.forEach(function(fn){
+            fn(data)
+        })
+    }
+    //当有些函数执行完毕之后得到的结果发布时会foreach循环所有的订阅者然后把参树传给他,当发布的参数满足订阅的某种条件之后就执行最终要执行的函数
+    let arr = [];
+    let e = new Event
+    e.on(function(data){
+        arr.push(data)
+        if(arr.length === 2){
+            console.log(data)
+        }
+    })
+</script>
+</html>

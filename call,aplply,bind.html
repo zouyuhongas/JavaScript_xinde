@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script>
+    /**
+    call 的方法
+    某个函数.call指向某个方法就是在那个方法下面加了一个this的方法
+    及时在fn2里面加了一个fn2.call的方法用完之后会自动删除,call的参数需要逐个传入,apply只传入一个数组
+    然后call会比apply的性能会高一点
+
+    */
+    function getName(){
+        console.log(this.name)
+    }
+    let obj = {
+        name:'zouke'
+    }
+    function getDefaultContext(context){
+        // 如果传入的是null,undefined,就会直接指向window
+        context = context || window;
+        // 所以要转成一个对象传入
+        context = Object(context);
+        return context;
+    }
+    !(function (prototype) {
+        function call2 (context,...args){
+            let symbol = Symbol('fn');
+            context[symbol] = this;
+            // 把传入的参数全部展开成一个数组
+            context[symbol](...args);
+            // 使用之后会把他删除
+            delete context[symbol];
+        }
+        // 在apply中会传入一个数组
+        function apply2 (context,args){
+            let symbol = Symbol('fn');
+            context[symbol] = this;
+            // 把传入的参数全部展开成一个数组
+            context[symbol](...args);
+            // 使用之后会把他删除
+            delete context[symbol];
+        }
+        // bind会返回一个函数,而且在返回的函数中还可以继续传参
+        function bind2 (context,...outArgs){
+            return (...args) => this.call(context,...outArgs,...args);
+        }
+        prototype.call2 = call2;
+        prototype.apply2 = apply2;
+        prototype.bind2 = bind2;
+    })(Function.prototype)
+    function getName(age,home){
+        console.log(this.name,age,home);
+    }
+    let obj = ({name:'honghong'});
+    getName.call2(obj,10,'gd');
+    getName.apply2(obj,[10,'gd'])
+    let bindGetName = getName.bind2(obj,10);
+    bindGetName('honghong')
+</script>
+</html>
